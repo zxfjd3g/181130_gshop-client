@@ -16,8 +16,8 @@
     setter: set方法, 当修改了当前属性的值自动调用, 监视属性值的变化去更新相关数据, this就是vm
 
 ## 4. 写出7个指令及其作用
-    v-text: 设置标签体文本
-    v-html: 设置标签体子标签
+    v-text: 设置标签体文本  ele.textContent = value   '<a>xxx</a>'
+    v-html: 设置标签体子标签  ele.innerHTML = value
     v-if/v-else/v-show: 显示/隐藏
     v-for: 遍历显示列表
     v-bind: 强制绑定表达式, 简写:
@@ -90,7 +90,7 @@
 ## 9. 模板中显示数据的来源
     data
     props
-    computed: 根据data/props/其它compute属性/vuex的state或getters计算产生
+    computed: 根据data/props//其它compute属性vuex的state或getters计算产生
 
 ## 10. data中的数组与对象属性不同处理
     对象: 对对象中的属性进行setter监视, 只要设置了新的属性值, 就会更新相应的界面
