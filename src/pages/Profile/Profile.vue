@@ -2,7 +2,7 @@
   <section class="profile">
     <Header title="我 的" />
 
-    <section class="profile-number">
+    <section class="profile-number" @click="$router.push('/login')">
       <a href="javascript:" class="profile-link">
         <div class="profile_image">
           <i class="iconfont icon-person"></i>
@@ -100,6 +100,7 @@
   .profile //我的
     width 100%
     .profile-number
+      top-border-1px(#e4e4e4)
       margin-top 45.5px
       .profile-link
         clearFix()
