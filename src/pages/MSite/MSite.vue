@@ -47,13 +47,15 @@
       this.$store.dispatch('getCategorys')
 
       // 创建swiper对象的时机: 必须在列表显示之后创建
-      new Swiper('.swiper-container', { // 配置对象
-        loop: true, // 循环模式选项
-        // 如果需要分页器
-        pagination: {
-          el: '.swiper-pagination',
-        },
-      })
+      /*setTimeout(() => {
+        new Swiper('.swiper-container', { // 配置对象
+          loop: true, // 循环模式选项
+          // 如果需要分页器
+          pagination: {
+            el: '.swiper-pagination',
+          },
+        })
+      }, 1000)*/
     },
 
     computed: {
@@ -88,6 +90,40 @@
         })
 
         return bigArr
+      }
+    },
+
+    /*
+    问题: 创建swiper后不能正常轮播
+    原因：创建太早(必须在列表显示之后)
+    解决: watch + $nextTick(callback)  在callback中创建swiper
+    */
+    watch: {// 监视组件对象的属性
+
+      // 更新状态数据  ==> 同步调用监视回调 ==> 异步更新界面
+      categorys () { // 状态数据categorys数组有数据了
+
+        // 创建swiper对象的时机: 必须在列表显示之后创建
+        /*setTimeout(() => {
+          new Swiper('.swiper-container', { // 配置对象
+            loop: true, // 循环模式选项
+            // 如果需要分页器
+            pagination: {
+              el: '.swiper-pagination',
+            },
+          })
+        }, 100)*/
+
+        // 将回调延迟到下次 DOM 更新循环之后执行。在修改数据之后立即使用它，然后等待 DOM 更新
+        this.$nextTick(() => {
+          new Swiper('.swiper-container', { // 配置对象
+            loop: true, // 循环模式选项
+            // 如果需要分页器
+            pagination: {
+              el: '.swiper-pagination',
+            },
+          })
+        })
       }
     },
 
