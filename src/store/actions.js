@@ -27,13 +27,15 @@ export default {
   },
 
   // 获取食品分类列表的异步action
-  async getCategorys ({commit}) {
+  async getCategorys ({commit}, callback) {
     // 1. 发送异步ajax请求
     const result = await reqCategorys()
     // 2. 成功后, 提交mutation
     if(result.code===0) {
       const categorys = result.data
       commit(RECEIVE_CATEGORYS, categorys)
+      // 更新完状态数据后调用
+      typeof callback ==='function' && callback()
     }
 
   },
