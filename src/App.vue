@@ -12,6 +12,7 @@
 
     async mounted () {
 
+      // 触发vuex的action调用: 请求后台接口获取address到state中
       this.$store.dispatch('getAddress')
     },
 

@@ -1,7 +1,7 @@
 <template>
   <section class="msite">
     <!--首页头部-->
-    <Header title="xxx">
+    <Header :title="address.name || '定位中...'">
       <span class="header_search" slot="left">
         <i class="iconfont icon-sousuo"></i>
       </span>
@@ -125,6 +125,7 @@
   </section>
 </template>
 <script>
+  import {mapState} from 'vuex'
   import Swiper from 'swiper'
   import 'swiper/dist/css/swiper.css'
   import ShopList from 'components/ShopList/ShopList.vue'
@@ -140,6 +141,10 @@
           el: '.swiper-pagination',
         },
       })
+    },
+
+    computed: {
+      ...mapState(['address'])
     },
 
     components: {
