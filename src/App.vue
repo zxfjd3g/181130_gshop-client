@@ -6,35 +6,14 @@
 </template>
 <script>
   import FootGuide from 'components/FootGuide/FootGuide.vue'
+  import {reqAddress} from './api'
 
   export default {
     name: 'App',
 
-    data () {
-      return {
-        firstName: 'A',
-        lastName: 'B'
-      }
-    },
-
-    computed: {
-      fullName1 () {
-        return this.firstName + '-' + this.lastName
-      },
-
-      fullName2: {
-        // 初始显示/相关数据发生改变时调用
-        get () {
-          return this.firstName + '-' + this.lastName
-        },
-
-        set (value) {
-          const names = value.split('-')
-          this.firstName = names[0]
-          this.lastName = names[1]
-        }
-      }
-
+    async mounted () {
+      const result = await reqAddress('115.36867', '40.10038')
+      console.log('result', result)
     },
 
     components: {
