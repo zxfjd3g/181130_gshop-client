@@ -6,14 +6,13 @@
 </template>
 <script>
   import FootGuide from 'components/FootGuide/FootGuide.vue'
-  import {reqAddress} from './api'
 
   export default {
     name: 'App',
 
     async mounted () {
-      const result = await reqAddress('115.36867', '40.10038')
-      console.log('result', result)
+
+      this.$store.dispatch('getAddress')
     },
 
     components: {
