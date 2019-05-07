@@ -72,6 +72,7 @@
   </section>
 </template>
 <script>
+  import { Toast, MessageBox } from 'mint-ui'
   import {
     reqSendCode,
     reqPwdLogin,
@@ -118,11 +119,13 @@
         // 发ajax请求, 发送短信验证码
         const result = await reqSendCode(this.phone)
         if(result.code===0) {
-          alert('发送验证成功')
+          // alert('发送验证成功')
+          Toast('发送验证成功')
         } else {
           // 停止计时
           this.computeTime = 0
-          alert(result.msg)
+          // alert(result.msg)
+          MessageBox.alert(result.msg)
         }
       },
 
@@ -154,7 +157,7 @@
             // 路轨到个人中心
             this.$router.replace('/profile')
           } else { // 登陆失败
-            alert(result.msg)
+            MessageBox.alert(result.msg)
           }
 
         }
