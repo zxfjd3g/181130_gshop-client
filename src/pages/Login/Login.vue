@@ -12,7 +12,11 @@
         <form>
           <div :class="{on: loginType}">
             <section class="login_message">
-              <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
+              <!--<input type="tel" maxlength="11" placeholder="手机号"
+                     name="phone" v-model="phone" v-validate="{required: true, regex: /^1\d{10}$/}">-->
+              <input type="tel" maxlength="11" placeholder="手机号"
+                     name="phone" v-model="phone" v-validate="'required|mobile'">
+              <span style="color: red;">{{errors.first('phone')}}</span>
               <button :disabled="!isRightPhone || computeTime>0" class="get_verification"
                       :class="{right_phone_number: isRightPhone}"
                       @click.prevent="sendCode">
@@ -20,7 +24,9 @@
               </button>
             </section>
             <section class="login_verification">
-              <input type="tel" maxlength="8" placeholder="验证码">
+              <input type="tel" maxlength="8" placeholder="验证码" v-model="code"
+                     name="code" v-validate="{required: true, regex: /^\d{6}$/}">
+              <span style="color: red;">{{errors.first('code')}}</span>
             </section>
             <section class="login_hint">
               温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -31,23 +37,30 @@
           <div :class="{on: !loginType}">
             <section>
               <section class="login_message">
-                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+                <input type="text" maxlength="11" placeholder="用户名" v-model="name"
+                       name="用户名" v-validate="'required'">
+                <span style="color: red;">{{errors.first('用户名')}}</span>
               </section>
               <section class="login_verification">
-                <input :type="isShowPwd ? 'text' : 'password'" placeholder="密码">
+                <input :type="isShowPwd ? 'text' : 'password'" placeholder="密码" v-model="pwd"
+                       name="密码" v-validate="'required'">
                 <div class="switch_button" :class="isShowPwd ? 'on' : 'off'" @click="isShowPwd = !isShowPwd">
                   <div class="switch_circle" :class="{right: isShowPwd}"></div>
                   <span class="switch_text">{{isShowPwd ? 'abc' : ''}}</span>
                 </div>
+
+                <span style="color: red;">{{errors.first('密码')}}</span>
               </section>
               <section class="login_message">
-                <input type="text" maxlength="11" placeholder="验证码">
+                <input type="text" maxlength="11" placeholder="验证码" v-model="captcha"
+                       name="验证码" v-validate="{required: true, regex: /^.{4}$/}">
                 <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                <span style="color: red;">{{errors.first('验证码')}}</span>
               </section>
             </section>
           </div>
 
-          <button class="login_submit">登录</button>
+          <button class="login_submit" @click.prevent="login">登录</button>
         </form>
         <a href="javascript:;" class="about_us">关于我们</a>
       </div>
@@ -64,6 +77,10 @@
       return {
         loginType: true, // 标识登陆方式: true-短信登陆, false-密码登陆
         phone: '', // 手机号
+        code: '', // 一次性短信验证码
+        name: '', // 用户名
+        pwd: '', // 密码
+        captcha: '', // 一次性图形验证码
         computeTime: 0,// 倒计时剩余的时间
         isShowPwd: false, // 是否显示密码
       }
@@ -77,6 +94,7 @@
     },
 
     methods: {
+      // 发送验证码
       sendCode () {
         // alert('----')
         // 指定最大时间
@@ -89,6 +107,23 @@
             clearInterval(intervalId)
           }
         }, 1000)
+      },
+
+      // 登陆
+      async login () {
+
+        const {loginType} = this
+        let names
+        if(loginType) {
+          names = ['phone', 'code']
+        } else {
+          names = ['用户名', '密码', '验证码']
+        }
+
+        const success = await this.$validator.validateAll(names)
+        if(success) {
+          alert('去请求登陆')
+        }
       }
     }
   }
