@@ -54,7 +54,8 @@
               <section class="login_message">
                 <input type="text" maxlength="11" placeholder="验证码" v-model="captcha"
                        name="验证码" v-validate="{required: true, regex: /^.{4}$/}">
-                <img class="get_verification" src="./images/captcha.svg" alt="captcha">
+                <img class="get_verification" src="http://localhost:5000/captcha" alt="captcha"
+                  @click="updateCaptcha" ref="captcha">
                 <span style="color: red;">{{errors.first('验证码')}}</span>
               </section>
             </section>
@@ -71,11 +72,17 @@
   </section>
 </template>
 <script>
+  import {
+    reqSendCode,
+    reqPwdLogin,
+    reqSmsLogin
+  } from '../../api'
+  import {RECEIVE_USER} from '../../store/mutation-types'
   export default {
     name: 'Login',
     data () {
       return {
-        loginType: true, // 标识登陆方式: true-短信登陆, false-密码登陆
+        loginType: false, // 标识登陆方式: true-短信登陆, false-密码登陆
         phone: '', // 手机号
         code: '', // 一次性短信验证码
         name: '', // 用户名
@@ -95,7 +102,7 @@
 
     methods: {
       // 发送验证码
-      sendCode () {
+      async sendCode () {
         // alert('----')
         // 指定最大时间
         this.computeTime = 30
@@ -103,17 +110,28 @@
         const intervalId = setInterval(() => {
           this.computeTime--
           // 一旦变为0, 停止计时
-          if(this.computeTime===0) {
+          if(this.computeTime<=0) {
             clearInterval(intervalId)
           }
         }, 1000)
+
+        // 发ajax请求, 发送短信验证码
+        const result = await reqSendCode(this.phone)
+        if(result.code===0) {
+          alert('发送验证成功')
+        } else {
+          // 停止计时
+          this.computeTime = 0
+          alert(result.msg)
+        }
       },
 
       // 登陆
       async login () {
 
-        const {loginType} = this
         let names
+        let result
+        const {loginType, phone, code, name, pwd, captcha} = this
         if(loginType) {
           names = ['phone', 'code']
         } else {
@@ -122,8 +140,30 @@
 
         const success = await this.$validator.validateAll(names)
         if(success) {
-          alert('去请求登陆')
+          // 如果验证通过, 发登陆的请求
+          if(loginType) {
+            result = await reqSmsLogin(phone, code)
+          } else {
+            result = await reqPwdLogin({name, pwd, captcha})
+          }
+          // 根据处理的结果, 做响应
+          if(result.code===0) { // 登陆成功
+            const user = result.data
+            // 保存user到state中去
+            this.$store.commit(RECEIVE_USER, user)
+            // 路轨到个人中心
+            this.$router.replace('/profile')
+          } else { // 登陆失败
+            alert(result.msg)
+          }
+
         }
+      },
+
+      // 更新图形验证码
+      updateCaptcha () {
+        // 只要给img指定一个新的src值, 浏览器自动发请求显示新的图片(携带一个时间戳的参数)
+        this.$refs.captcha.src = 'http://localhost:5000/captcha?time=' + Date.now()
       }
     }
   }
