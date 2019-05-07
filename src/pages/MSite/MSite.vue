@@ -37,7 +37,7 @@
 </template>
 <script>
   import {mapState} from 'vuex'
-  import Swiper from 'swiper'
+  import Swiper from 'swiper/dist/js/swiper'
   import 'swiper/dist/css/swiper.css'
   import ShopList from 'components/ShopList/ShopList.vue'
 

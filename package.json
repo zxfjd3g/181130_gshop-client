@@ -17,7 +17,7 @@
     "mint-ui": "^2.2.13",
     "mockjs": "^1.0.1-beta3",
     "moment": "^2.23.0",
-    "swiper": "^4.4.6",
+    "swiper": "4",
     "vee-validate": "2.2.4",
     "vue": "^2.5.2",
     "vue-lazyload": "1.2.6",
