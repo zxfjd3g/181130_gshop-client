@@ -78,7 +78,9 @@ const actions = {
 }
 
 const getters = {
-
+  totalShopCount (state) {
+    return state.shops.length
+  }
 }
 
 export default {
