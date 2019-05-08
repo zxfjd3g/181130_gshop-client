@@ -26,6 +26,7 @@
     name: 'Shop',
 
     async mounted () {
+      // 将商家相关数据从接口获取到vuex的状态中
       this.$store.dispatch('getInfo')
       this.$store.dispatch('getGoods')
       this.$store.dispatch('getRatings')
