@@ -20,8 +20,26 @@
 <script>
   import ShopHeader from 'components/ShopHeader/ShopHeader.vue'
 
+  import {reqGoods, reqInfo, reqRatings} from '../../api'
+
   export default {
     name: 'Shop',
+
+    async mounted () {
+      this.$store.dispatch('getInfo')
+      this.$store.dispatch('getGoods')
+      this.$store.dispatch('getRatings')
+
+      /*const result1 = await reqGoods()
+      const result2 = await reqInfo()
+      const result3 = await reqRatings()
+      const results = await Promise.all([reqGoods(), reqInfo(), reqRatings()])
+      const goods = results[0].data
+      const info = results[1].data
+      const ratings = results[2].data
+      console.log(goods, info, ratings)*/
+    },
+
     components: {
       ShopHeader
     }

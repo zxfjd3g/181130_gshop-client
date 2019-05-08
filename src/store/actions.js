@@ -6,14 +6,20 @@ import {
   reqShops,
   reqCategorys,
   reqUser,
-  reqLogout
+  reqLogout,
+  reqGoods,
+  reqRatings,
+  reqInfo
 } from '../api'
 import {
   RECEIVE_SHOPS,
   RECEIVE_CATEGORYS,
   RECEIVE_ADDRESS,
   RECEIVE_USER,
-  RESET_USER
+  RESET_USER,
+  RECEIVE_GOODS,
+  RECEIVE_RATINGS,
+  RECEIVE_INFO
 } from './mutation-types'
 
 export default {
@@ -73,4 +79,34 @@ export default {
       commit(RESET_USER)
     }
   },
+
+
+  // 异步获取商家信息
+  async getInfo({commit}) {
+    const result = await reqInfo()
+    if(result.code===0) {
+      const info = result.data
+      commit(RECEIVE_INFO, {info})
+    }
+  },
+
+  // 异步获取商家评价列表
+  async getRatings({commit}) {
+    const result = await reqRatings()
+    if(result.code===0) {
+      const ratings = result.data
+      commit(RECEIVE_RATINGS, {ratings})
+    }
+  },
+
+  // 异步获取商家商品列表
+  async getGoods({commit}) {
+    const result = await reqGoods()
+    if(result.code===0) {
+      const goods = result.data
+      commit(RECEIVE_GOODS, {goods})
+    }
+  },
+
+
 }

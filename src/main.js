@@ -10,6 +10,7 @@ import store from './store'
 import Header from 'components/Header/Header.vue'
 import Star from 'components/Star/Star.vue'
 import './validate'
+import './mock/mockServer'
 
 
 // 注册全局组件
