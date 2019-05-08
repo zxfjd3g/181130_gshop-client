@@ -3,4 +3,7 @@
  */
 export default {
 
+  zzz (state) { // state是总状态
+
+  }
 }

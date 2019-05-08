@@ -72,7 +72,12 @@
     },
 
     computed: {
-      ...mapState(['address', 'categorys']),
+      // ...mapState(['address', 'categorys']),
+      ...mapState({
+        // address: 'msite.address'
+        address: state => state.msite.address,  // state是vuex的总状态
+        categorys: state => state.msite.categorys,
+      }),
 
       /*
       用于显示分类轮播的分类的二维数组
