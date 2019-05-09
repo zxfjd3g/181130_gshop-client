@@ -202,3 +202,31 @@
         读取getter数据: ...mapGetters(['totalShopCount'])
         更新状态数据: this.$store.dispatch('actionName')   this.$store.commit('mutationName')    
     
+## 4. ShopHeader组件
+    1). 异步显示数据效果的编码流程
+        ajax
+          ajax请求函数
+          接口请求函数
+        vuex
+          modules/shop.js
+        组件
+          dispatch(): 异步获取后台数据到vuex的state
+          mapState(): 从vuex的state中读取对应的数据
+          模板中显示
+    2). 初始显示异常
+        情况: Cannot read property 'xxx' of undefined"
+        原因: 初始值是空对象, 内部没有数据, 而模板中直接显示3层表达式
+        解决: 使用v-if指令
+    3). vue transition动画
+        <transition name="xxx">
+        xxx-enter-active / xxx-leave-active
+          transition
+        xxx-enter / xxx-leave-to
+          隐藏时的样式
+          
+## 5. 基本滑动
+    使用better-scroll
+    new BScroll(wrapDiv, {})
+    创建BScroll对象的时机
+      watch + $nextTick()
+    better-scroll禁用了原生的dom事件, 使用的是自定义事件

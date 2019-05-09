@@ -3,8 +3,9 @@
     <div class="goods">
       <div class="menu-wrapper">
         <ul>
-          <!--current-->
-          <li class="menu-item" v-for="good in goods" :key="good.name">
+          <!--current   currentIndex: 当前分类下标-->
+          <li class="menu-item" v-for="(good, index) in goods"
+              :key="good.name" :class="{current: currentIndex===index}">
             <span class="text bottom-border-1px">
               <img class="icon" :src="good.icon" v-if="good.icon">
               {{good.name}}
@@ -13,7 +14,7 @@
         </ul>
       </div>
       <div class="foods-wrapper">
-        <ul>
+        <ul ref="rightUl">
           <li class="food-list-hook" v-for="good in goods" :key="good.name">
             <h1 class="title">{{good.name}}</h1>
             <ul>
@@ -48,17 +49,73 @@
   import {mapState} from 'vuex'
   export default {
 
+    data () {
+      return {
+        scrollY: 0, // 右侧列表滑动的Y轴坐标: srollY  在右侧滑动过程中不断变化
+        tops: [], // 右侧所有分类的top的数组: tops  列表显示确定其值
+      }
+    },
+
     computed: {
       ...mapState({
         goods: state => state.shop.goods
-      })
+      }),
+
+      // 当前分类的下标
+      currentIndex () {
+        // 取出相关数据
+        const {scrollY, tops} = this
+        // 计算得到结果并返回
+        /*
+        tops:  [0, 4, 9, 15, 18]
+        scrollY: [top, nextTop)
+         */
+        return tops.findIndex((top, index) => {
+          return scrollY>=top && scrollY<tops[index+1]
+        })
+      }
+    },
+
+    methods: {
+      // 读取右侧所有分类的top值的数组
+      initTops () {
+        const tops = []
+        let top = 0
+        tops.push(top)
+        // 得到所有li
+        const lis = this.$refs.rightUl.children
+        Array.from(lis).forEach(li => {
+          top += li.clientHeight
+          tops.push(top)
+        })
+        
+        // 更新tops状态
+        this.tops = tops
+        console.log('tops', tops)
+      },
+
+      // 初始化滚动
+      initScroll () {
+        const leftScroll = new BScroll('.menu-wrapper', { // better-scroll禁用了原生 dom事件
+          // click: true, // 标识分发自定义click事件
+        })
+        const rightScroll = new BScroll('.foods-wrapper', {
+          probeType: 1
+        })
+
+        // 给右侧列表绑定scroll监听
+        rightScroll.on('scroll', ({x, y}) => {
+          console.log('scroll', x, y)
+          this.scrollY = Math.abs(y)
+        })
+      }
     },
 
     watch: {
       goods () { // goods状态数据更新了
-        this.$nextTick(() => {
-          new BScroll('.menu-wrapper')
-          new BScroll('.foods-wrapper')
+        this.$nextTick(() => { // 界面更新 ---列表显示了
+          this.initScroll()
+          this.initTops()
         })
       }
     }
