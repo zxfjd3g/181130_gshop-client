@@ -8,7 +8,8 @@ import {
   RECEIVE_RATINGS,
   RECEIVE_GOODS,
   INCREMENT_FOOD_COUNT,
-  DECREMENT_FOOD_COUNT
+  DECREMENT_FOOD_COUNT,
+  CLEAR_CART
 } from '../mutation-types'
 
 import {
@@ -65,7 +66,13 @@ const mutations = {
         state.cartFoods2.splice(state.cartFoods2.indexOf(food), 1)
       }
     }
+  },
 
+  [CLEAR_CART](state) {
+    // 消除购物车中所有food的count
+    state.cartFoods2.forEach(food => food.count = 0)
+    // 清空购物车数组
+    state.cartFoods2 = []
   },
 
   abc (state) {

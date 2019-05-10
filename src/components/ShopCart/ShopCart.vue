@@ -1,58 +1,98 @@
 <template>
   <div>
     <div class="shopcart">
+
       <div class="content">
-        <div class="content-left">
+        <div class="content-left" @click="toggleShow">
           <div class="logo-wrapper">
-            <div class="logo highlight">
-              <i class="iconfont icon-shopping_cart highlight"></i>
+            <div class="logo" :class="{highlight: totalCount>0}">
+              <i class="iconfont icon-shopping_cart" :class="{highlight: totalCount>0}"></i>
             </div>
-            <div class="num">1</div>
+            <div class="num" v-if="totalCount>0">{{totalCount}}</div>
           </div>
-          <div class="price highlight">￥10</div>
-          <div class="desc">另需配送费￥4元</div>
+          <div class="price" :class="{highlight: totalCount>0}">￥{{totalPrice}}</div>
+          <div class="desc">另需配送费￥{{info.deliveryPrice}}元</div>
         </div>
+
         <div class="content-right">
-          <div class="pay not-enough">
-            还差￥10元起送
+          <div class="pay" :class="payClass">
+            {{payText}}
           </div>
         </div>
       </div>
-      <div class="shopcart-list" style="display: none;">
-        <div class="list-header">
-          <h1 class="title">购物车</h1>
-          <span class="empty">清空</span>
-        </div>
-        <div class="list-content">
-          <ul>
-            <li class="food">
-              <span class="name">红枣山药糙米粥</span>
-              <div class="price"><span>￥10</span></div>
-              <div class="cartcontrol-wrapper">
-                <div class="cartcontrol">
-                  <div class="iconfont icon-remove_circle_outline"></div>
-                  <div class="cart-count">1</div>
-                  <div class="iconfont icon-add_circle"></div>
+
+      <transition name="move">
+        <div class="shopcart-list" v-show="isShow">
+          <div class="list-header">
+            <h1 class="title">购物车</h1>
+            <span class="empty" @click="clearCart">清空</span>
+          </div>
+          <div class="list-content">
+            <ul>
+              <li class="food" v-for="(food, index) in cartFoods2" :key="index">
+                <span class="name">{{food.name}}</span>
+                <div class="price"><span>￥{{food.price}}</span></div>
+                <div class="cartcontrol-wrapper">
+                  <CartControl :food="food"/>
                 </div>
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
+      </transition>
+
     </div>
-    <div class="list-mask" style="display: none;"></div>
+    <transition name="fade">
+      <div class="list-mask" v-show="isShow" @click="toggleShow"></div>
+    </transition>
   </div>
 </template>
 <script>
   import {mapState, mapGetters} from 'vuex'
+  import {CLEAR_CART} from '../../store/mutation-types'
   export default {
+
+    data () {
+      return {
+        isShow: false
+      }
+    },
+
     computed: {
       ...mapState({
         info: state => state.shop.info,
         cartFoods2: state => state.shop.cartFoods2
       }),
 
-      ...mapGetters(['totalCount', 'totalPrice'])
+      ...mapGetters(['totalCount', 'totalPrice']),
+
+      payText () {
+        const {totalPrice} = this
+        const {minPrice} = this.info
+        if(totalPrice===0) {
+          return `￥${minPrice}元起送`
+        } else if (totalPrice<minPrice) {
+          return `还差￥${minPrice - totalPrice}元起送`
+        } else {
+          return '去结算'
+        }
+      },
+
+      payClass () {
+        const {totalPrice} = this
+        const {minPrice} = this.info
+        return totalPrice>=minPrice ? 'enough' : 'not-enough'
+      }
+    },
+
+    methods: {
+      toggleShow () {
+        this.isShow = !this.isShow
+      },
+
+      clearCart () {
+        this.$store.commit(CLEAR_CART)
+      }
     }
   }
 </script>
@@ -152,6 +192,12 @@
       top: 0
       z-index: -1
       width: 100%
+      transform translateY(-100%)
+      &.move-enter-active, &.move-leave-active
+        transition all .5s
+      &.move-enter, &.move-leave-to
+        opacity 0
+        transform translateY(0)
       .list-header
         height: 40px
         line-height: 40px
@@ -205,7 +251,7 @@
     opacity: 1
     background: rgba(7, 17, 27, 0.6)
     &.fade-enter-active, &.fade-leave-active
-      transition: all 0.5s
+      transition: opacity 0.5s
     &.fade-enter, &.fade-leave-to
       opacity: 0
 </style>
