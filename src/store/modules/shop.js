@@ -1,11 +1,14 @@
 /*
 商家模块
  */
+import Vue from 'vue'
 
 import {
   RECEIVE_INFO,
   RECEIVE_RATINGS,
-  RECEIVE_GOODS
+  RECEIVE_GOODS,
+  INCREMENT_FOOD_COUNT,
+  DECREMENT_FOOD_COUNT
 } from '../mutation-types'
 
 import {
@@ -32,6 +35,33 @@ const mutations = {
   [RECEIVE_GOODS](state, {goods}) {
     state.goods = goods
   },
+
+  [INCREMENT_FOOD_COUNT](state, {food}) {
+    if(food.count) {
+      food.count++
+    } else { // 第一次点+
+      /*
+      问题: 直接给有数据绑定的对象(响应式对象)添加新的属性, 新的属性没有数据绑定效果
+      解决: 使用Vue.set()添加属性, 这个属性就有数据绑定
+       */
+      // 给food添加一个新的属性: count: 1
+      // food.count = 1
+
+      // 为响应式对象添加一个属性，确保新属性也是响应式的，并且能够触发视图更新
+      Vue.set( food, 'count', 1)
+    }
+  },
+
+  [DECREMENT_FOOD_COUNT](state, {food}) {
+    if(food.count>0) {
+      food.count--
+    }
+
+  },
+
+  abc (state) {
+    console.log('shop mutation abc()', state)
+  }
 }
 
 const actions = {
@@ -61,6 +91,20 @@ const actions = {
       commit(RECEIVE_GOODS, {goods})
     }
   },
+
+  // 更新指定food的count
+  updateFoodCount ({commit}, {food, isAdd}) {
+    if(isAdd) {
+      commit(INCREMENT_FOOD_COUNT, {food})
+    } else {
+      commit(DECREMENT_FOOD_COUNT, {food})
+    }
+  },
+
+  yyy ({commit, state}) {// state是总状态
+    console.log('shop action yyy()', state)
+    commit('abc') // 触发所有同名的mutation函数调用(有可能更新多个模块的状态数据)
+  }
 }
 
 const getters = {

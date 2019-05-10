@@ -9,6 +9,7 @@ import router from './router'
 import store from './store'
 import Header from 'components/Header/Header.vue'
 import Star from 'components/Star/Star.vue'
+import CartControl from 'components/CartControl/CartControl.vue'
 import './validate'
 import './mock/mockServer'
 
@@ -17,6 +18,7 @@ import './mock/mockServer'
 Vue.component('Header', Header)
 Vue.component('Star', Star)
 Vue.component(Button.name, Button)
+Vue.component('CartControl', CartControl)
 
 new Vue({
   el: '#app',

@@ -19,8 +19,8 @@ export default new Vuex.Store({
   actions,
   getters,
   modules: {
-    msite,  // state = {address, shops, categorys}
     shop,  // state = {goods, info, ratings}
+    msite,  // state = {address, shops, categorys}
     user,  // state = {users}
   }
 })

@@ -33,6 +33,10 @@ const mutations = {
   [RECEIVE_CATEGORYS] (state, categorys) {
     state.categorys = categorys
   },
+
+  abc (state) {
+    console.log('msite mutation abc()', state)
+  }
 }
 
 const actions = {
@@ -73,8 +77,13 @@ const actions = {
       const shops = result.data
       commit(RECEIVE_SHOPS, shops)
     }
+  },
 
+  yyy ({commit, state}) {// state是总状态
+    console.log('msite action yyy()', state)
+    commit('abc') // 触发所有同名的mutation函数调用(有可能更新多个模块的状态数据)
   }
+
 }
 
 const getters = {
