@@ -10,6 +10,7 @@ import store from './store'
 import Header from 'components/Header/Header.vue'
 import Star from 'components/Star/Star.vue'
 import CartControl from 'components/CartControl/CartControl.vue'
+import Split from 'components/Split/Split.vue'
 import './validate'
 import './mock/mockServer'
 
@@ -19,6 +20,7 @@ Vue.component('Header', Header)
 Vue.component('Star', Star)
 Vue.component(Button.name, Button)
 Vue.component('CartControl', CartControl)
+Vue.component('Split', Split)
 
 new Vue({
   el: '#app',
