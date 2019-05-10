@@ -22,7 +22,7 @@
       </div>
 
       <transition name="move">
-        <div class="shopcart-list" v-show="isShow">
+        <div class="shopcart-list" v-show="listShow">
           <div class="list-header">
             <h1 class="title">购物车</h1>
             <span class="empty" @click="clearCart">清空</span>
@@ -43,11 +43,12 @@
 
     </div>
     <transition name="fade">
-      <div class="list-mask" v-show="isShow" @click="toggleShow"></div>
+      <div class="list-mask" v-show="listShow" @click="toggleShow"></div>
     </transition>
   </div>
 </template>
 <script>
+  import BScroll from 'better-scroll'
   import {mapState, mapGetters} from 'vuex'
   import {CLEAR_CART} from '../../store/mutation-types'
   export default {
@@ -82,12 +83,46 @@
         const {totalPrice} = this
         const {minPrice} = this.info
         return totalPrice>=minPrice ? 'enough' : 'not-enough'
+      },
+
+      // 购物车列表是否显示
+      listShow () {
+        // 如果当前的总数量为0, 直接返回false
+        if(this.totalCount===0) {
+          this.isShow = false
+          return false
+        }
+
+        if(this.isShow) { // 列表界面将要更新显示
+          this.$nextTick(() => {
+            console.log('listShow()')
+            /*
+            单例对象: 单一的实例对象
+              1). 创建前: 判断不存在才创建
+              2). 创建后: 保存
+             */
+            if(!this.scroll) { // 没有scroll对象, 创建一个新的
+              this.scroll = new BScroll('.list-content', {   // 给<ul>添加style
+                click: true
+              })
+            } else {
+              this.scroll.refresh() // 让滚动对象刷新一下: 统计更新的高度看要不要形成滑动
+            }
+          })
+        }
+
+        // 否则返回isShow
+        return this.isShow
       }
     },
 
     methods: {
       toggleShow () {
-        this.isShow = !this.isShow
+        // 只有当totalCount>0时让切换
+        if (this.totalCount > 0) {
+          this.isShow = !this.isShow
+        }
+
       },
 
       clearCart () {
