@@ -294,7 +294,7 @@
         d. 购物车列表中点一次添加, 会增加多项
         e. 原本可以滑动的列表, 关闭再打开后不能再滑动了
 
-## 4. ShopRatings组件和RatingsFilter组件
+## 4. Ratings组件和RatingsFilter组件
     1). 使用计算属性对列表进行过滤显示
     2). vue组件间通信
         子向父: 函数props, vue自定义事件

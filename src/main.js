@@ -22,6 +22,9 @@ Vue.component(Button.name, Button)
 Vue.component('CartControl', CartControl)
 Vue.component('Split', Split)
 
+// 给Vue原型对象添加一个vm的$bus的属性
+Vue.prototype.$bus = new Vue()
+
 new Vue({
   el: '#app',
   /*components: {

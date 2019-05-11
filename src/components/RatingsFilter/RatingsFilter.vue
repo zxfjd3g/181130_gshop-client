@@ -11,7 +11,7 @@
         吐槽<span class="count">{{ratingsTotalCount - positiveRatingsTotalCount}}</span>
       </span>
     </div>
-    <div class="switch" :class="{on: onlyShowHasText}" @click="toggleOnlyShowHasText">
+    <div class="switch" :class="{on: onlyShowHasText}" @click="$emit('toggleOnlyShowHasText')">
       <span class="iconfont icon-check_circle"></span>
       <span class="text">只看有内容的评价</span>
     </div>
@@ -23,12 +23,20 @@
     props: {
       selectType: Number,
       onlyShowHasText: Boolean,
-      toggleOnlyShowHasText: Function,
-      setSelectType: Function
+      /*toggleOnlyShowHasText: Function,
+      setSelectType: Function*/
     },
 
     computed: {
       ... mapGetters(['ratingsTotalCount', 'positiveRatingsTotalCount'])
+    },
+
+    methods: {
+      setSelectType (type) {
+        // 分发自定义事件: setSelectType
+        // this.$emit('setSelectType', type)
+        this.$bus.$emit('setSelectType', type)
+      }
     }
   }
 </script>

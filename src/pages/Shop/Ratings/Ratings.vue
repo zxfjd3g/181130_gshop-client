@@ -27,11 +27,19 @@
 
       <Split/>
 
-      <ratings-filter
+      <!--<ratings-filter
         :selectType="selectType"
         :onlyShowHasText="onlyShowHasText"
         :setSelectType="setSelectType"
         :toggleOnlyShowHasText="toggleOnlyShowHasText"
+      />-->
+
+      <!--在父组件中给子组件标签(对象)绑定监听-->
+      <ratings-filter
+        :selectType="selectType"
+        :onlyShowHasText="onlyShowHasText"
+        @setSelectType="setSelectType"
+        @toggleOnlyShowHasText="toggleOnlyShowHasText"
       />
 
       <div class="rating-wrapper">
@@ -110,6 +118,22 @@
       }
     },
 
+    // 第一次显示之后立即执行
+    mounted () {
+      // 通过事件总线绑定监听
+      this.$bus.$on('setSelectType', (type) => {
+        this.setSelectType(type)
+      })
+
+      // 如果当前已经有ratings列表数据, 直接可以创建scroll对象
+      if(this.ratings.length>0) {
+        new BScroll('.ratings', {
+          click: true
+        })
+      }
+
+    },
+
     methods: {
       setSelectType (type) {
         this.selectType = type
@@ -121,8 +145,9 @@
     },
 
     watch: {
-      ratings() {
+      ratings() {// 初始显示时没有数据, 后面更新为为有数据的ratings
         this.$nextTick(() => {
+          // 在列表显示之后创建对象(更新显示)
           new BScroll('.ratings', {
             click: true
           })
