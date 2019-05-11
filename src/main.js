@@ -4,6 +4,7 @@
 import Vue from 'vue'
 import { Button} from 'mint-ui'
 import VueLazyload from 'vue-lazyload'
+import VueScroller from 'vue-scroller'
 
 import App from './App.vue'
 import router from './router'
@@ -15,6 +16,7 @@ import Split from 'components/Split/Split.vue'
 import './validate'
 import './mock/mockServer'
 import loading from './common/images/loading.gif'
+import './filters'
 
 
 // 将store保存到Vue上
@@ -24,6 +26,7 @@ Vue.store = store
 Vue.use(VueLazyload, { // 内部定义一个全局的指令: lazy
   loading,
 })
+Vue.use(VueScroller) // 内部定义了一个全局组件: scroller
 
 
 // 注册全局组件

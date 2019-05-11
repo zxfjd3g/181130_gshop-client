@@ -9,30 +9,32 @@
         <span class="header_login_text">登录|注册</span>
       </span>
     </Header>
-    <!--首页导航-->
-    <nav class="msite_nav">
+    <scroller>
+      <!--首页导航-->
+      <nav class="msite_nav">
 
-      <div class="swiper-container" v-if="categorys.length>0">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="(categorys, index) in categorysArr" :key="index">
-            <a href="javascript:" class="link_to_food" v-for="(c, index) in categorys" :key="index">
-              <div class="food_container">
-                <img :src="'https://fuss10.elemecdn.com' + c.image_url">
-              </div>
-              <span>{{c.title}}</span>
-            </a>
+        <div class="swiper-container" v-if="categorys.length>0">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" v-for="(categorys, index) in categorysArr" :key="index">
+              <a href="javascript:" class="link_to_food" v-for="(c, index) in categorys" :key="index">
+                <div class="food_container">
+                  <img :src="'https://fuss10.elemecdn.com' + c.image_url">
+                </div>
+                <span>{{c.title}}</span>
+              </a>
+            </div>
+
           </div>
 
+          <div class="swiper-pagination"></div>
         </div>
 
-        <div class="swiper-pagination"></div>
-      </div>
+        <img src="./images/msite_back.svg" alt="loading" v-else>
 
-      <img src="./images/msite_back.svg" alt="loading" v-else>
-
-    </nav>
-    <!--首页附近商家-->
-    <ShopList/>
+      </nav>
+      <!--首页附近商家-->
+      <ShopList/>
+    </scroller>
   </section>
 </template>
 <script>

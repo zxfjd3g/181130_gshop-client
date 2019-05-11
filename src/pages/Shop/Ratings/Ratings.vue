@@ -58,7 +58,8 @@
               <div class="recommend">
                 <span class="iconfont" :class="rating.rateType===0 ? 'icon-thumb_up' : 'icon-thumb_down'"></span>
               </div>
-              <div class="time">{{rating.rateTime}}</div>
+              <!--<div class="time">{{rating.rateTime | dateFormat('HH:mm:ss')}}</div>-->
+              <div class="time">{{rating.rateTime | dateFormat}}</div>
             </div>
           </li>
         </ul>

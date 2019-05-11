@@ -16,6 +16,7 @@
       3.5 = 3 + 1 + 1
        */
       starClasses() {
+        debugger
         const {score} = this
         const arr = []
 
