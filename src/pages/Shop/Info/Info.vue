@@ -31,7 +31,7 @@
       <section class="section">
         <h3 class="section-title">商家实景</h3>
         <div class="pic-wrapper">
-          <ul class="pic-list">
+          <ul class="pic-list" ref="picUl">
             <li class="pic-item" v-for="pic in info.pics" :key="pic">
               <img width="120" height="90" :src="pic">
             </li>
@@ -80,9 +80,7 @@
     mounted () {
       // 如果当前已经有ratings列表数据, 直接可以创建scroll对象
       if(this.info.name) {
-        new BScroll('.shop-info', {
-          click: true
-        })
+        this.initScroll()
       }
     },
 
@@ -95,13 +93,32 @@
     watch: {
       info() {// 初始显示时没有数据, 后面更新为为有数据的info
         this.$nextTick(() => {
-          // 在列表显示之后创建对象(更新显示)
-          new BScroll('.shop-info', {
-            click: true
-          })
+          this.initScroll()
         })
       }
     },
+
+    methods: {
+      initScroll () {
+        new BScroll('.shop-info', {
+          click: true
+        })
+
+        const ul = this.$refs.picUl
+        const liWidth = 120
+        const space = 6
+        const count = this.info.pics.length
+        const width = (liWidth + space) *count - space
+        // 设置包含图片列表的ul的样式宽度
+        ul.style.width = width + 'px'
+
+
+        new BScroll('.pic-wrapper', {
+          click: true,
+          scrollX: true, // 水平滑动
+        })
+      }
+    }
   }
 </script>
 

@@ -3,6 +3,7 @@
  */
 import Vue from 'vue'
 import { Button} from 'mint-ui'
+import VueLazyload from 'vue-lazyload'
 
 import App from './App.vue'
 import router from './router'
@@ -13,6 +14,16 @@ import CartControl from 'components/CartControl/CartControl.vue'
 import Split from 'components/Split/Split.vue'
 import './validate'
 import './mock/mockServer'
+import loading from './common/images/loading.gif'
+
+
+// 将store保存到Vue上
+Vue.store = store
+
+// 声明使用插件
+Vue.use(VueLazyload, { // 内部定义一个全局的指令: lazy
+  loading,
+})
 
 
 // 注册全局组件

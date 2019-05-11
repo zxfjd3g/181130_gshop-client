@@ -72,6 +72,7 @@
   </section>
 </template>
 <script>
+  import Vue from 'vue'
   import { Toast, MessageBox } from 'mint-ui'
   import {
     reqSendCode,
@@ -168,7 +169,30 @@
         // 只要给img指定一个新的src值, 浏览器自动发请求显示新的图片(携带一个时间戳的参数)
         this.$refs.captcha.src = 'http://localhost:5000/captcha?time=' + Date.now()
       }
-    }
+    },
+
+    /*
+    beforeRouteEnter调用时组件对象还没有创建, this不是组件对象
+     */
+    beforeRouteEnter (to, from, next) {
+      console.log('beforeRouteEnter()', this)
+      // 检查用户是否登陆, 如果没有登陆, 自动跳转到login
+      /*
+      if(Vue.store.state.user.user._id) {
+        next('/profile')
+      } else {
+        next()
+      }*/
+
+      next((component) => { // 指定回调函数在组件对象创建后立即执行, 并且传入组件对象
+        if(component.$store.state.user.user._id) {
+          next('/profile')
+        } else {
+          next()
+        }
+      })
+
+    },
   }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
